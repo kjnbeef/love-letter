@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For my baby ♥</title>
+    <title>You've Got Mail ♥</title>
     <style>
         * {
             margin: 0;
@@ -144,7 +144,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60vw; /* REALLY HUGE: 70% of viewport */
+            width: 70vw; /* REALLY HUGE: 70% of viewport */
             height: 80vh;
             max-width: none;
             max-height: none;
@@ -266,7 +266,7 @@
 
                             <p>and so, thank you for being you. thank you for loving me the way you do. i’m always cheering you on, always thinking of you, always choosing you. love u bebequoh muwah mwuha chupchup</p>
                         </div>
-                        <div class="signature"> from ur love,<br>jr<3</div>
+                        <div class="signature">mwa mwa mwa mwa from ur love,<br>jr</div>
                     </div>
                 </div>
                 <div class="envelope-front"></div>
@@ -297,7 +297,7 @@
             heart.className = 'heart';
             heart.textContent = '♥';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 10 + 12) + 's';
+            heart.style.animationDuration = (Math.random() * 6 + 6) + 's'; /* hearts move faster */
             document.getElementById('hearts').appendChild(heart);
             setTimeout(() => heart.remove(), 20000);
         }
@@ -307,7 +307,7 @@
             sticker.className = 'sticker';
             sticker.src = stickerImages[Math.floor(Math.random() * stickerImages.length)];
             sticker.style.left = Math.random() * 100 + 'vw';
-            sticker.style.animationDuration = (Math.random() * 15 + 18) + 's';
+            sticker.style.animationDuration = (Math.random() * 8 + 8) + 's'; /* stickers move faster */
             const size = Math.random() * 40 + 70;
             sticker.style.width = size + 'px';
             sticker.style.height = size + 'px';
@@ -315,8 +315,8 @@
             setTimeout(() => sticker.remove(), 25000);
         }
 
-        setInterval(createHeart, 900);
-        setInterval(createSticker, 2200);
+        setInterval(createHeart, 300); /* MUCH more hearts */
+        setInterval(createSticker, 700); /* stickers appear way more often */
 
         for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 300);
         for (let i = 0; i < 4; i++) setTimeout(createSticker, i * 800);
