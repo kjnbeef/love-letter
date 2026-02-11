@@ -49,8 +49,8 @@
 
         .sticker {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             opacity: 0.4;
             animation: floatSticker 20s infinite;
             pointer-events: none;
@@ -177,10 +177,10 @@
             bottom: auto;
             transform: translate(-50%, -50%);
             width: 95%;
-            max-width: 700px;
+            max-width: 900px;
             height: auto;
-            max-height: 85vh;
-            padding: 50px 45px;
+            max-height: 90vh;
+            padding: 60px 60px;
             z-index: 20;
         }
 
@@ -202,8 +202,8 @@
         }
 
         .envelope-wrapper.opened .letter h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
         }
 
         .letter-text {
@@ -214,8 +214,8 @@
         }
 
         .envelope-wrapper.opened .letter-text {
-            font-size: 1.05rem;
-            line-height: 1.8;
+            font-size: 1.15rem;
+            line-height: 1.9;
         }
 
         .letter-text p {
@@ -231,8 +231,8 @@
         }
 
         .envelope-wrapper.opened .signature {
-            font-size: 1.1rem;
-            margin-top: 20px;
+            font-size: 1.25rem;
+            margin-top: 25px;
         }
 
         /* Click instruction */
@@ -405,7 +405,7 @@
             sticker.style.left = Math.random() * 100 + 'vw';
             sticker.style.animationDuration = (Math.random() * 15 + 15) + 's';
             sticker.style.animationDelay = Math.random() * 5 + 's';
-            const size = Math.random() * 40 + 60; // Random size between 60-100px
+            const size = Math.random() * 60 + 90; // Random size between 90-150px
             sticker.style.width = size + 'px';
             sticker.style.height = size + 'px';
             document.getElementById('hearts').appendChild(sticker);
