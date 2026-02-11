@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You've Got Mail ♥</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Floating hearts background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float 15s infinite;
+        }
+
+        .sticker {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.4;
+            animation: floatSticker 20s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatSticker {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope */
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope-wrapper.opened {
+            cursor: default;
+        }
+
+        .envelope {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 180px;
+        }
+
+        .envelope-back {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #e74c3c;
+            clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+            z-index: 1;
+        }
+
+        .envelope-front {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #c0392b;
+            clip-path: polygon(0 100%, 50% 40%, 100% 100%);
+            z-index: 3;
+        }
+
+        .envelope-top {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 60%;
+            background: #e74c3c;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 0.8s ease;
+            z-index: 5;
+        }
+
+        .envelope-wrapper.opened .envelope-top {
+            transform: rotateX(180deg);
+        }
+
+        /* Letter inside envelope */
+        .letter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 300px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.8s ease;
+            z-index: 2;
+            overflow-y: auto;
+        }
+
+        .envelope-wrapper.opened .letter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            bottom: auto;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            max-width: 700px;
+            height: auto;
+            max-height: 85vh;
+            padding: 50px 45px;
+            z-index: 20;
+        }
+
+        .letter-content-wrapper {
+            opacity: 0;
+            transition: opacity 0.5s ease 0.5s;
+        }
+
+        .envelope-wrapper.opened .letter-content-wrapper {
+            opacity: 1;
+        }
+
+        .letter h2 {
+            font-size: 1.2rem;
+            color: #764ba2;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        .envelope-wrapper.opened .letter h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .letter-text {
+            font-size: 0.65rem;
+            line-height: 1.6;
+            color: #333;
+            text-align: justify;
+        }
+
+        .envelope-wrapper.opened .letter-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .letter-text p {
+            margin-bottom: 10px;
+        }
+
+        .signature {
+            text-align: right;
+            font-style: italic;
+            color: #764ba2;
+            margin-top: 15px;
+            font-size: 0.7rem;
+        }
+
+        .envelope-wrapper.opened .signature {
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        /* Click instruction */
+        .click-instruction {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+            z-index: 10;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .envelope-wrapper.opened .click-instruction {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Close button */
+        .close-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #764ba2;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .close-btn:hover {
+            background: #764ba2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .envelope-wrapper.opened ~ .close-btn {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .envelope {
+                width: 240px;
+                height: 150px;
+            }
+
+            .letter {
+                width: 200px;
+                height: 260px;
+                padding: 25px 20px;
+            }
+
+            .envelope-wrapper.opened .letter {
+                width: 95%;
+                max-width: 500px;
+                padding: 35px 30px;
+            }
+
+            .letter h2 {
+                font-size: 1rem;
+            }
+
+            .envelope-wrapper.opened .letter h2 {
+                font-size: 1.5rem;
+            }
+
+            .letter-text {
+                font-size: 0.6rem;
+            }
+
+            .envelope-wrapper.opened .letter-text {
+                font-size: 0.95rem;
+            }
+
+            .envelope-wrapper.opened .signature {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope">
+                <div class="envelope-back"></div>
+                <div class="letter">
+                    <div class="letter-content-wrapper">
+                        <h2>My Dearest,</h2>
+                        <div class="letter-text">
+                            <p>I find myself sitting here, trying to put into words what my heart has been whispering to me every single day. Words seem so inadequate when trying to express what I feel, but I'll try my best because you deserve to know just how much you mean to me.</p>
+                            
+                            <p>From the moment you came into my life, everything changed. The colors became brighter, the days became warmer, and my world became infinitely more beautiful. You have this incredible way of making ordinary moments feel extraordinary, and I find myself falling for you more deeply with each passing day.</p>
+                            
+                            <p>You are the reason I smile without reason, the thought that comforts me in difficult times, and the dream I never want to wake up from. Every moment with you feels like a gift, every conversation we share is a treasure I hold close to my heart, and every laugh we share together is a melody I never want to forget.</p>
+                            
+                            <p>I want you to know that you are loved beyond measure, cherished beyond words, and appreciated more than you could ever imagine. Thank you for being exactly who you are—for your kindness, your warmth, your laughter, and for the way you make me feel seen and valued. Thank you for choosing me, for trusting me with your heart, and for making my life so wonderfully complete.</p>
+                            
+                            <p>As we continue this beautiful journey together, I promise to always cherish you, to support you through every high and low, to celebrate your victories and comfort you in your struggles. I promise to love you with all that I am, today and every day that follows.</p>
+                            
+                            <p>You are my today and all of my tomorrows, my greatest adventure and my safest place, my best friend and my deepest love.</p>
+                        </div>
+                        <div class="signature">Forever and always yours,<br>[Your Name]</div>
+                    </div>
+                </div>
+                <div class="envelope-front"></div>
+                <div class="envelope-top"></div>
+            </div>
+            <div class="click-instruction">💌 Click to open 💌</div>
+        </div>
+        <button class="close-btn" id="closeBtn">Close Letter</button>
+    </div>
+
+    <script>
+        // Sticker images
+        const stickerImages = ['1.png', '3.png'];
+
+        // Envelope opening
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        const closeBtn = document.getElementById('closeBtn');
+
+        envelopeWrapper.addEventListener('click', function() {
+            if (!this.classList.contains('opened')) {
+                this.classList.add('opened');
+            }
+        });
+
+        closeBtn.addEventListener('click', function() {
+            envelopeWrapper.classList.remove('opened');
+        });
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '♥';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('hearts').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 20000);
+        }
+
+        // Create floating stickers
+        function createSticker() {
+            const sticker = document.createElement('img');
+            sticker.classList.add('sticker');
+            sticker.src = stickerImages[Math.floor(Math.random() * stickerImages.length)];
+            sticker.style.left = Math.random() * 100 + 'vw';
+            sticker.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            sticker.style.animationDelay = Math.random() * 5 + 's';
+            const size = Math.random() * 40 + 60; // Random size between 60-100px
+            sticker.style.width = size + 'px';
+            sticker.style.height = size + 'px';
+            document.getElementById('hearts').appendChild(sticker);
+
+            setTimeout(() => {
+                sticker.remove();
+            }, 25000);
+        }
+
+        // Generate hearts periodically
+        setInterval(createHeart, 800);
+        
+        // Generate stickers periodically (less frequent than hearts)
+        setInterval(createSticker, 2000);
+        
+        // Create initial hearts
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 300);
+        }
+
+        // Create initial stickers
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createSticker, i * 800);
+        }
+    </script>
+</body>
+</html>
